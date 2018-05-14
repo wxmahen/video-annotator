@@ -20,6 +20,14 @@ public class CsvFileCtrl {
 
     public CsvFileCtrl() {
         csvFile = new File(Config.CSV_FILE);
+        try {
+            File tempBackupsFolder = new File(Config.TEMP_BACKUPS_FOLDER);
+            if (!tempBackupsFolder.exists()) {
+                tempBackupsFolder.mkdir();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void start() {

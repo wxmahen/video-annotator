@@ -4,7 +4,6 @@ import com.educluster.video_annotator.config.Config;
 import com.educluster.video_annotator.model.VideoFrame;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.text.DecimalFormat;
 import javax.imageio.ImageIO;
 import javax.swing.JProgressBar;
 
@@ -14,14 +13,19 @@ import javax.swing.JProgressBar;
  */
 public class ImageFileUtils {
 
-//    DecimalFormat decimalFormat;
     public ImageFileUtils() {
-//        decimalFormat = new DecimalFormat("00000000");
+        try {
+            File imageFolder = new File(Config.IMAGE_FOLDER);
+            if (!imageFolder.exists()) {
+                imageFolder.mkdir();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     void saveImage(BufferedImage bufferedImage, int imgNum) {
         try {
-//            String path = Config.IMAGE_FOLDER + File.separator + decimalFormat.format(imgNum) + Config.IMAGE_EXT;
             String path = Config.IMAGE_FOLDER + File.separator + Config.IMAGE_PREFIX + imgNum + Config.IMAGE_EXT;
             ImageIO.write(bufferedImage, "jpg", new File(path));
         } catch (Exception e) {
