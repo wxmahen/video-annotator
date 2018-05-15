@@ -49,10 +49,11 @@ public class ImageFileUtils {
         try {
             String fileName = Config.IMAGE_FOLDER + File.separator + Config.IMAGE_PREFIX + imgNum + Config.IMAGE_EXT;
             File file = new File(fileName);
-            BufferedImage bufferedImage = ImageIO.read(file);
-            videoFrame = new VideoFrame(imgNum, bufferedImage);
+            if (file.exists()) {
+                BufferedImage bufferedImage = ImageIO.read(file);
+                videoFrame = new VideoFrame(imgNum, bufferedImage);
+            }
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return videoFrame;
     }

@@ -12,36 +12,45 @@ import org.bytedeco.javacv.Java2DFrameConverter;
  */
 public class VideoUtils {
 
-    ImageFileUtils imageFileUtil;
+    private boolean converting = false;
+    private ImageFileUtils imageFileUtil;
 
     public VideoUtils() {
         imageFileUtil = new ImageFileUtils();
     }
 
-    public int convertToImages(String mp4Path, JProgressBar progressBar) {
+    public void convertToImages(String mp4Path, JProgressBar progressBar) {
+        converting = true;
         progressBar.setValue(0);
-        int frameCount = 0;
         try {
             Java2DFrameConverter converter = new Java2DFrameConverter();
             FFmpegFrameGrabber frameGrabber = new FFmpegFrameGrabber(mp4Path);
             frameGrabber.start();
             Frame frame;
             int imgNum = 0;
-            frameCount = frameGrabber.getLengthInFrames();
+            int frameCount = frameGrabber.getLengthInFrames();
             for (int ii = 1; ii <= frameCount; ii++) {
-                imgNum++;
-                frameGrabber.setFrameNumber(ii);
-                frame = frameGrabber.grab();
-                BufferedImage bi = converter.convert(frame);
-                imageFileUtil.saveImage(bi, imgNum);
-                progressBar.setValue(100 * ii / frameCount);
-                ii += 1;
+                if (converting) {
+                    imgNum++;
+                    frameGrabber.setFrameNumber(ii);
+                    frame = frameGrabber.grab();
+                    BufferedImage bi = converter.convert(frame);
+                    imageFileUtil.saveImage(bi, imgNum);
+                    progressBar.setValue(100 * ii / frameCount);
+                    ii += 1;
+                } else {
+                    break;
+                }
             }
             progressBar.setValue(100);
             frameGrabber.stop();
+            converting = false;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return frameCount;
+    }
+
+    public void stopConverting() {
+        converting = false;
     }
 }

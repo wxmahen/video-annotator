@@ -42,7 +42,7 @@ public class CsvFileCtrl {
     public void writeToFile(int imgNum, int[] presence, String action) {
         String line = imgNum + "";
         for (int i : presence) {
-            line = line + "," + presence[i];
+            line = line + "," + i;
         }
         line = line + "," + action;
         writeLine(line);
