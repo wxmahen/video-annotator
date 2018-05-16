@@ -70,6 +70,8 @@ public class Dashboard extends javax.swing.JFrame {
         frameNoLabel = new javax.swing.JLabel();
         imageLabel = new javax.swing.JLabel();
         frameNoLabel3 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        skipFramesSpinner = new javax.swing.JSpinner();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -172,7 +174,7 @@ public class Dashboard extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(frameNoLabel)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 892, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,6 +188,12 @@ public class Dashboard extends javax.swing.JFrame {
         frameNoLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         frameNoLabel3.setText("Next Frame");
         frameNoLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setText("Skip Frames");
+
+        skipFramesSpinner.setFont(new java.awt.Font("Ubuntu", 0, 16)); // NOI18N
+        skipFramesSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 999, 1));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -201,11 +209,16 @@ public class Dashboard extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(skipFramesSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(convertBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 715, Short.MAX_VALUE)
+                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(loadImagesBtn))
+                        .addComponent(loadImagesBtn)
+                        .addGap(0, 0, 0))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -237,10 +250,12 @@ public class Dashboard extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addComponent(videoTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButton1)
-                        .addComponent(convertBtn))
+                        .addComponent(jLabel2)
+                        .addComponent(skipFramesSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(loadImagesBtn)))
+                        .addComponent(loadImagesBtn)
+                        .addComponent(convertBtn)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -254,7 +269,7 @@ public class Dashboard extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(actionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+                                .addComponent(actionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(nextBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(objectsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -369,6 +384,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel imageLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -383,6 +399,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel nextImageLabel;
     private javax.swing.JPanel objectsPanel;
     private javax.swing.JProgressBar progressBar;
+    private javax.swing.JSpinner skipFramesSpinner;
     private javax.swing.JTextField videoTxt;
     // End of variables declaration//GEN-END:variables
 
@@ -428,26 +445,32 @@ public class Dashboard extends javax.swing.JFrame {
             reset();
             File selectedFile = jfc.getSelectedFile();
             seletedFilePath = selectedFile.getAbsolutePath();
-            videoTxt.setText(seletedFilePath);
             boolean isMp4 = seletedFilePath.endsWith(".mp4");
             convertBtn.setEnabled(isMp4);
+            String frameRate = videoUtils.getFrameRate(seletedFilePath);
             if (!isMp4) {
                 AlertUtils.showWarning("Selected video should be an MP4 file.");
+            } else if (frameRate == null) {
+                AlertUtils.showError("Selected MP4 file cannot be processed.");
+            } else {
+                videoTxt.setText("(Rate:" + frameRate + ") " + seletedFilePath);
             }
         }
     }
 
     private void convertToImages() {
         if (convertBtn.getText().equals(convertButtonName)) {
-            convertBtn.setText("Stop");
-            loadImagesBtn.setEnabled(false);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    videoUtils.convertToImages(seletedFilePath, progressBar);
-                    reset();
-                }
-            }).start();
+            Integer skipFrames = (Integer)skipFramesSpinner.getValue();
+                convertBtn.setText("Stop");
+                loadImagesBtn.setEnabled(false);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageFileUtils.deleteAllImages(progressBar);
+                        videoUtils.convertToImages(seletedFilePath, progressBar,skipFrames);
+                        reset();
+                    }
+                }).start();
         } else if (AlertUtils.showConfirmation("Are you sure you want to stop this?")) {
             videoUtils.stopConverting();
         }
