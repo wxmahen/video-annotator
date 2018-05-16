@@ -1,6 +1,7 @@
 package com.educluster.video_annotator.view;
 
 import com.educluster.video_annotator.config.Config;
+import com.educluster.video_annotator.model.Entry;
 import com.educluster.video_annotator.model.VideoFrame;
 import com.educluster.video_annotator.util.AlertUtils;
 import com.educluster.video_annotator.util.CsvFileCtrl;
@@ -45,7 +46,7 @@ public class Dashboard extends javax.swing.JFrame {
         imageFileUtils = new ImageFileUtils();
         setLabelsAndActions();
         WindowUtils.setSize(this);
-        reset();
+        reload();
     }
 
     @SuppressWarnings("unchecked")
@@ -72,9 +73,11 @@ public class Dashboard extends javax.swing.JFrame {
         frameNoLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         skipFramesSpinner = new javax.swing.JSpinner();
+        prevBtn = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -114,7 +117,7 @@ public class Dashboard extends javax.swing.JFrame {
         progressBar.setStringPainted(true);
 
         nextBtn.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        nextBtn.setText("Next");
+        nextBtn.setText(">");
         nextBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nextBtnActionPerformed(evt);
@@ -122,7 +125,7 @@ public class Dashboard extends javax.swing.JFrame {
         });
 
         loadImagesBtn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        loadImagesBtn.setText("Refresh");
+        loadImagesBtn.setText("Reload");
         loadImagesBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loadImagesBtnActionPerformed(evt);
@@ -195,6 +198,15 @@ public class Dashboard extends javax.swing.JFrame {
         skipFramesSpinner.setFont(new java.awt.Font("Ubuntu", 0, 16)); // NOI18N
         skipFramesSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 999, 1));
 
+        prevBtn.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        prevBtn.setText("<");
+        prevBtn.setEnabled(false);
+        prevBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prevBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -217,8 +229,7 @@ public class Dashboard extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(loadImagesBtn)
-                        .addGap(0, 0, 0))
+                        .addComponent(loadImagesBtn))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -227,16 +238,14 @@ public class Dashboard extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(objectsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(frameNoLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(14, 14, 14)
-                                        .addComponent(nextBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(actionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(actionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(frameNoLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(frameNoLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(prevBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(nextBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addComponent(nextImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(frameNoLabel3, javax.swing.GroupLayout.Alignment.LEADING))))
                 .addContainerGap())
@@ -271,7 +280,9 @@ public class Dashboard extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(actionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nextBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(nextBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(prevBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(objectsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -287,6 +298,15 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMenuItem1);
+
+        jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem5.setText("Save");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem5);
 
         jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         jMenuItem3.setText("Exit");
@@ -350,7 +370,7 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_nextBtnActionPerformed
 
     private void loadImagesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadImagesBtnActionPerformed
-        reset();
+        reload();
     }//GEN-LAST:event_loadImagesBtnActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -373,6 +393,15 @@ public class Dashboard extends javax.swing.JFrame {
         exit();
     }//GEN-LAST:event_exit
 
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        csvFileCtrl.writeToFile();
+        AlertUtils.showAlert("Saved successfully!");
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void prevBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prevBtnActionPerformed
+        loadPrevImage();
+    }//GEN-LAST:event_prevBtnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup actionLabelGroup;
     private javax.swing.JPanel actionsPanel;
@@ -392,18 +421,20 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JButton loadImagesBtn;
     private javax.swing.JButton nextBtn;
     private javax.swing.JLabel nextImageLabel;
     private javax.swing.JPanel objectsPanel;
+    private javax.swing.JButton prevBtn;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JSpinner skipFramesSpinner;
     private javax.swing.JTextField videoTxt;
     // End of variables declaration//GEN-END:variables
 
-    private void reset() {
+    private void reload() {
         enableComponents(false);
         convertBtn.setText(convertButtonName);
         convertBtn.setEnabled(false);
@@ -414,16 +445,15 @@ public class Dashboard extends javax.swing.JFrame {
         nextImageLabel.setText(noFrameText);
         frameIndex = -1;
         frameCount = -1;
-        nextBtn.setText("Next");
         videoTxt.setText("");
-        csvFileCtrl.closeFile();
         csvFileCtrl.createStartupBackup();
-        csvFileCtrl.start();
         loadImagesBtn.setEnabled(true);
         frameCount = imageFileUtils.getImageCount();
+        prevBtn.setEnabled(false);
         if (frameCount > 0) {
             enableComponents(true);
             loadNextImage();
+            loadEntry();
         }
     }
 
@@ -442,7 +472,7 @@ public class Dashboard extends javax.swing.JFrame {
         JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
         int returnValue = jfc.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            reset();
+            reload();
             File selectedFile = jfc.getSelectedFile();
             seletedFilePath = selectedFile.getAbsolutePath();
             boolean isMp4 = seletedFilePath.endsWith(".mp4");
@@ -460,39 +490,81 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void convertToImages() {
         if (convertBtn.getText().equals(convertButtonName)) {
-            Integer skipFrames = (Integer)skipFramesSpinner.getValue();
-                convertBtn.setText("Stop");
-                loadImagesBtn.setEnabled(false);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        imageFileUtils.deleteAllImages(progressBar);
-                        videoUtils.convertToImages(seletedFilePath, progressBar,skipFrames);
-                        reset();
-                    }
-                }).start();
+            Integer skipFrames = (Integer) skipFramesSpinner.getValue();
+            convertBtn.setText("Stop");
+            loadImagesBtn.setEnabled(false);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    imageFileUtils.deleteAllImages(progressBar);
+                    videoUtils.convertToImages(seletedFilePath, progressBar, skipFrames);
+                    reload();
+                }
+            }).start();
         } else if (AlertUtils.showConfirmation("Are you sure you want to stop this?")) {
             videoUtils.stopConverting();
         }
     }
 
     private void loadNextImage() {
+        prevBtn.setEnabled(true);
         if (frameIndex >= 0) {
-            csvFileCtrl.writeToFile(frameIndex + 1, getObjectPresence(), getSelectedAction());
+            csvFileCtrl.addToEntries(frameIndex + 1, getObjectPresence(), getSelectedAction());
             resetObjectAndActionPresence();
         }
-        if (frameIndex + 1 == frameCount) {
-            nextBtn.setText("Finish");
-            String fileName = csvFileCtrl.createBackup();
-            AlertUtils.showAlert("Created backup " + fileName);
+        if (frameIndex == frameCount - 1) {
+            nextBtn.setEnabled(false);
         } else {
             frameIndex++;
         }
+        loadEntry();
         VideoFrame videoFrame = imageFileUtils.getVideoFrame(frameIndex + 1);
         setImageIcon(videoFrame, imageLabel);
         VideoFrame nextVideoFrame = imageFileUtils.getVideoFrame(frameIndex + 2);
         setImageIcon(nextVideoFrame, nextImageLabel);
         frameNoLabel.setText((1 + frameIndex) + "/" + (frameCount));
+    }
+
+    private void loadPrevImage() {
+        nextBtn.setEnabled(true);
+        if (frameIndex >= 0) {
+            csvFileCtrl.addToEntries(frameIndex + 1, getObjectPresence(), getSelectedAction());
+            resetObjectAndActionPresence();
+        }
+        if (frameIndex == 0) {
+            prevBtn.setEnabled(false);
+        } else {
+            frameIndex--;
+        }
+        loadEntry();
+        VideoFrame videoFrame = imageFileUtils.getVideoFrame(frameIndex + 1);
+        setImageIcon(videoFrame, imageLabel);
+        VideoFrame nextVideoFrame = imageFileUtils.getVideoFrame(frameIndex + 2);
+        setImageIcon(nextVideoFrame, nextImageLabel);
+        frameNoLabel.setText((1 + frameIndex) + "/" + (frameCount));
+    }
+
+    private void loadEntry() {
+        Entry entry = csvFileCtrl.getEntry(frameIndex);
+        if (entry != null) {
+            int index = 0;
+            for (int presence : entry.getPresence()) {
+                if (presence == 1) {
+                    objectLabels[index].setSelected(true);
+                    objectLabels[index].setBackground(Color.GREEN.darker());
+                }
+                index++;
+            }
+            for (JToggleButton objectLabel : actionLabels) {
+                if (entry.getAction().equals(objectLabel.getText())) {
+                    objectLabel.setSelected(true);
+                    objectLabel.setBackground(Color.GREEN.darker());
+                } else {
+                    objectLabel.setSelected(false);
+                    objectLabel.setBackground(Color.GRAY);
+                }
+            }
+        }
     }
 
     private void setImageIcon(VideoFrame videoFrame, JLabel label) {
@@ -563,7 +635,7 @@ public class Dashboard extends javax.swing.JFrame {
                 @Override
                 public void run() {
                     imageFileUtils.deleteAllImages(progressBar);
-                    reset();
+                    reload();
                     convertBtn.setEnabled(false);
                     loadImagesBtn.setEnabled(false);
                     AlertUtils.showAlert("Deleted!");
@@ -634,6 +706,7 @@ public class Dashboard extends javax.swing.JFrame {
     private void exit() {
         if (AlertUtils.showConfirmation("Are you sure you want to exit?")) {
             videoUtils.stopConverting();
+            csvFileCtrl.writeToFile();
             System.exit(0);
         }
     }
