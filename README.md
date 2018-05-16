@@ -29,7 +29,10 @@ After that, you can select the objects and the actions that the current image co
 
 ![Config](/running_programs/screenshots/4.png)
 
-Finally, you will find a file named "output.csv".
+Finally, you will find a file named "output.csv" which shows the frame number, object presence (by 1 or 0), and the action.
+You can feed the file to your RL algorithms.
+
+![Config](/running_programs/screenshots/5.png)
 
 ## Getting started (for developers)
 This is a Maven project. Build with dependencies and run. Using an IDE like NetBeans will make it easier for you.
