@@ -81,6 +81,7 @@ public class Dashboard extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -330,6 +331,15 @@ public class Dashboard extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem4);
 
+        jMenuItem6.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_COMMA, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem6.setText("Previous Frame");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem6);
+
         jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem2.setText("Delete All Images");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -402,6 +412,10 @@ public class Dashboard extends javax.swing.JFrame {
         loadPrevImage();
     }//GEN-LAST:event_prevBtnActionPerformed
 
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        loadPrevImage();
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup actionLabelGroup;
     private javax.swing.JPanel actionsPanel;
@@ -422,6 +436,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JButton loadImagesBtn;
@@ -477,13 +492,10 @@ public class Dashboard extends javax.swing.JFrame {
             seletedFilePath = selectedFile.getAbsolutePath();
             boolean isMp4 = seletedFilePath.endsWith(".mp4");
             convertBtn.setEnabled(isMp4);
-            String frameRate = videoUtils.getFrameRate(seletedFilePath);
             if (!isMp4) {
                 AlertUtils.showWarning("Selected video should be an MP4 file.");
-            } else if (frameRate == null) {
-                AlertUtils.showError("Selected MP4 file cannot be processed.");
             } else {
-                videoTxt.setText("(Rate:" + frameRate + ") " + seletedFilePath);
+                videoTxt.setText(seletedFilePath);
             }
         }
     }
@@ -555,15 +567,18 @@ public class Dashboard extends javax.swing.JFrame {
                 }
                 index++;
             }
-            for (JToggleButton objectLabel : actionLabels) {
-                if (entry.getAction().equals(objectLabel.getText())) {
-                    objectLabel.setSelected(true);
-                    objectLabel.setBackground(Color.GREEN.darker());
+            for (JToggleButton actionLabel : actionLabels) {
+                if (entry.getAction().equals(actionLabel.getText())) {
+                    actionLabel.setSelected(true);
+                    actionLabel.setBackground(Color.GREEN.darker());
                 } else {
-                    objectLabel.setSelected(false);
-                    objectLabel.setBackground(Color.GRAY);
+                    actionLabel.setSelected(false);
+                    actionLabel.setBackground(Color.GRAY);
                 }
             }
+        } else {
+            actionLabels[0].setSelected(true);
+            actionLabels[0].setBackground(Color.GREEN.darker());
         }
     }
 

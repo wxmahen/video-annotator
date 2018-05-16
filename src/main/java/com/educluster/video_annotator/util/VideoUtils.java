@@ -19,16 +19,6 @@ public class VideoUtils {
         imageFileUtil = new ImageFileUtils();
     }
 
-    public String getFrameRate(String mp4Path) {
-        try {
-            Java2DFrameConverter converter = new Java2DFrameConverter();
-            FFmpegFrameGrabber frameGrabber = new FFmpegFrameGrabber(mp4Path);
-            return Double.toString(frameGrabber.getFrameRate());
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     public void convertToImages(String mp4Path, JProgressBar progressBar, Integer skipFrames) {
         converting = true;
         progressBar.setValue(0);
