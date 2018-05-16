@@ -29,7 +29,7 @@ public class Dashboard extends javax.swing.JFrame {
     private final VideoUtils videoUtils;
     private final ImageFileUtils imageFileUtils;
     private final CsvFileCtrl csvFileCtrl;
-    private final String convertButtonName = "Convert to images";
+    private final String convertButtonName = "Convert to Images";
     private final String noFrameText = "No Frame";
     private String seletedFilePath;
     private int frameIndex;
@@ -80,6 +80,11 @@ public class Dashboard extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Video Annotator 1.0.0");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                exit(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Video (MP4)");
@@ -281,7 +286,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         jMenu2.setText("Edit");
 
-        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_RIGHT, 0));
+        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_PERIOD, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem4.setText("Next Frame");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -349,6 +354,10 @@ public class Dashboard extends javax.swing.JFrame {
         exit();
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
+    private void exit(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_exit
+        exit();
+    }//GEN-LAST:event_exit
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup actionLabelGroup;
     private javax.swing.JPanel actionsPanel;
@@ -377,11 +386,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JTextField videoTxt;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void setDefaultCloseOperation(int number){
-        exit();
-    }
-    
     private void reset() {
         enableComponents(false);
         convertBtn.setText(convertButtonName);
