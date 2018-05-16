@@ -23,6 +23,8 @@ Click "Open" button to choose an MP4 video file. After it is loaded, choose a va
 The default value is 0. If you set 0, all the frames of the video will be extracted. If you set 1, every second frame will be extracted, and so on.
 After all the frames are extracted, the first frame will be displayed.
 
+Instead of extracting images from a video, you can also copy your existing images to "images" folder. But they should be in "frame[number].jpg" format. E.g: frame1.jpg, frame2.jpg, ... After copying, click "Reload" button.
+
 ![Config](/running_programs/screenshots/3.png)
 
 After that, you can select the objects and the actions that the current image contains and click next. Do the same for all the images. And then, save the changes under the file menu.
