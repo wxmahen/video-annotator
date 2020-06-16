@@ -12,7 +12,7 @@ import javax.swing.JProgressBar;
  * @author Mahen Samaranayake
  */
 public class ImageFileUtils {
-
+    
     public ImageFileUtils() {
         try {
             File imageFolder = new File(Config.IMAGE_FOLDER);
@@ -23,7 +23,7 @@ public class ImageFileUtils {
             e.printStackTrace();
         }
     }
-
+    
     void saveImage(BufferedImage bufferedImage, int imgNum) {
         try {
             String path = Config.IMAGE_FOLDER + File.separator + Config.IMAGE_PREFIX + imgNum + Config.IMAGE_EXT;
@@ -32,7 +32,7 @@ public class ImageFileUtils {
             e.printStackTrace();
         }
     }
-
+    
     public int getImageCount() {
         int count = 0;
         try {
@@ -43,7 +43,7 @@ public class ImageFileUtils {
         }
         return count;
     }
-
+    
     public VideoFrame getVideoFrame(int imgNum) {
         VideoFrame videoFrame = null;
         try {
@@ -57,7 +57,7 @@ public class ImageFileUtils {
         }
         return videoFrame;
     }
-
+    
     public void deleteAllImages(JProgressBar progressBar) {
         progressBar.setValue(0);
         try {
@@ -73,8 +73,9 @@ public class ImageFileUtils {
             }
             progressBar.setValue(100);
         } catch (Exception e) {
+            AlertUtils.showError(e.getMessage());
             e.printStackTrace();
         }
     }
-
+    
 }

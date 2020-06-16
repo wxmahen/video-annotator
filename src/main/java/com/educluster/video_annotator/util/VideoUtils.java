@@ -13,7 +13,7 @@ import org.bytedeco.javacv.Java2DFrameConverter;
 public class VideoUtils {
 
     private boolean converting = false;
-    private ImageFileUtils imageFileUtil;
+    private final ImageFileUtils imageFileUtil;
 
     public VideoUtils() {
         imageFileUtil = new ImageFileUtils();
@@ -46,6 +46,7 @@ public class VideoUtils {
             frameGrabber.stop();
             converting = false;
         } catch (Exception e) {
+            AlertUtils.showError(e.getMessage());
             e.printStackTrace();
         }
     }
