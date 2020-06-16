@@ -1,10 +1,12 @@
 package com.educluster.video_annotator.run;
 
 import com.educluster.video_annotator.config.Config;
+import com.educluster.video_annotator.util.AlertUtils;
 import com.educluster.video_annotator.view.Dashboard;
 import java.awt.EventQueue;
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URL;
 import java.util.Properties;
 
 /**
@@ -14,7 +16,7 @@ import java.util.Properties;
 public class Startup {
 
     public static void main(String[] args) {
-        setConfigurations();
+        new Startup().setConfigurations();
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -32,16 +34,18 @@ public class Startup {
         });
     }
 
-    private static void setConfigurations() {
-        File file = new File("config.properties");
-        Properties properties = new Properties();
+    private void setConfigurations() {
+        URL root = getClass().getProtectionDomain().getCodeSource().getLocation();
         try {
-            properties.load(new FileInputStream(file));
+            URL propertiesFile = new URL(root, "config.properties");
+            Properties properties = new Properties();
+            properties.load(propertiesFile.openStream());
             String objects = properties.getProperty("objects");
             Config.OBJECTS = objects.split(",");
             String actions = properties.getProperty("actions");
             Config.ACTIONS = actions.split(",");
         } catch (Exception e) {
+            AlertUtils.showAlert(e.getMessage());
             e.printStackTrace();
         }
     }
